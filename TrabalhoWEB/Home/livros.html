@@ -21,17 +21,22 @@
             <span class="nav-item" id="nav-livros" style="background-color: #333;">Livros</span> <span class="nav-item" id="nav-discos">Discos</span>
         </div>
     </nav>
-    <div class="col-md-12 justify-content-end d-flex m-2">
-        <button type="button" id="btnCadastrar" class="btn btn-primary me-3">Cadastrar</button>
+    <div class="row col-md-12 justify-content-end d-flex m-2">
+        <div class="col-md-3">
+            <input type="text" id="searchInput" class="form-control m-2" placeholder="Pesquisar livros...">
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-secondary m-2">Pesquisar</button>
+        </div>
+        <div class="col-md-4 justify-content-end d-flex m-2">
+            <button type="button" id="btnCadastrar" class="btn btn-primary me-3">Cadastrar</button>
+        </div>
     </div>
 
     <div class="container mt-4">
         <h1 class="mb-4" style="margin-left: 10px;">Todos os Livros</h1>
         <hr style="width: 72%; margin-left: 10px;">
-
-        <div class="card-container" id="livros-container">
-            
-        </div>
+        <div class="row card-container gap-0" id="livros-container" style="justify-content: flex-start;"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -43,8 +48,9 @@
             const btnCadastrar = document.getElementById('btnCadastrar'); 
 
             const livrosContainer = document.getElementById('livros-container');
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.querySelector('.btn.btn-secondary');
 
-    
             if (btnCadastrar) {
                 btnCadastrar.addEventListener('click', function () {
                     window.location.href = 'cadastrarLivro.html';
@@ -69,41 +75,156 @@
 
 
             function criarCardLivro(livro) {
-                const newCard = document.createElement('div');
-                newCard.classList.add('card', 'shadow');
-                newCard.setAttribute('data-livro-id', livro.id);
-                newCard.style.maxWidth = '250px';
-                newCard.style.margin = '10px';
-
-                const imagemSrc = livro.capa && livro.capa !== '' ? livro.capa : '../imagens/placeholder-capa.jpg';
-
-                newCard.innerHTML = `
-                    <div class="caixa-produtos">
-                        <img src="${imagemSrc}" alt="Capa do livro ${livro.nome}" class="imagem-produto">
-                        <h2 class="titulo-produto">${livro.nome}</h2>
-                        <p>${livro.descricao}</p>
-                        <span class="preco1" style="margin-left: 65%;">R$ ${parseFloat(livro.preco).toFixed(2).replace('.', ',')}</span>
-                        <i class="bx bx-shopping-bag add-cart"></i>
+                const cardNovo = document.createElement('div');
+                cardNovo.className = 'col-md-3 mb-4';
+                cardNovo.innerHTML = `
+                    <div class="card h-100 highlight-card border-0 shadow-lg rounded-4 overflow-hidden" style="transition: transform 0.2s, box-shadow 0.2s;">
+                        <br><img src="${livro.capa && livro.capa !== '' ? livro.capa : '../imagens/placeholder-capa.jpg'}" class="card-img-top card-img-livro" alt="Capa do livro ${livro.nome}">
+                        <div class="card-body bg-white rounded-bottom-4">
+                            <h5 class="card-title fw-bold text-primary">${livro.nome}</h5>
+                            <p class="card-text text-secondary">${livro.descricao}</p>
+                            <p class="card-text text-success fw-bold fs-5">R$ ${parseFloat(livro.preco).toFixed(2).replace('.', ',')}</p>
+                            <div class="d-flex justify-content-between gap-2 mt-2">
+                                <button class="btn btn-warning btn-sm btn-editar rounded-pill px-3">Editar</button>
+                                <button class="btn btn-danger btn-sm btn-excluir rounded-pill px-3">Excluir</button>
+                            </div>
                         </div>
+                    </div>
+
+                    
                 `;
-                return newCard;
+                cardNovo.querySelector('.btn-editar').addEventListener('click', function () {
+                    window.location.href = `cadastrarLivro.html?tipo=livro&id=${livro.id}`;
+                });
+                cardNovo.querySelector('.btn-excluir').addEventListener('click', function () {
+                    if (confirm('Deseja realmente excluir este livro?')) {
+                        excluirLivro(livro.id);
+                    }
+                });
+                return cardNovo;
             }
 
-
-            function carregarLivrosCadastrados() {
+            function excluirLivro(id) {
                 let livrosSalvos = JSON.parse(localStorage.getItem('livrosCadastrados')) || [];
+                livrosSalvos = livrosSalvos.filter(livro => livro.id !== id);
+                localStorage.setItem('livrosCadastrados', JSON.stringify(livrosSalvos));
+                carregarLivrosCadastrados();
+            }
 
+            
+            if (!document.getElementById('highlight-card-style')) {
+                const style = document.createElement('style');
+                style.id = 'highlight-card-style';
+                style.innerHTML = `
+                .highlight-card {
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.18)!important;
+                    border-radius: 1.5rem!important;
+                    overflow: hidden;
+                    background: linear-gradient(135deg, #f8fafc 80%, #e0f7fa 100%);
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                }
+                .highlight-card:hover {
+                    transform: translateY(-8px) scale(1.03);
+                    box-shadow: 0 16px 40px rgba(0,0,0,0.22)!important;
+                    transition: transform 0.2s, box-shadow 0.2s;
+                }
+                .card-body {
+                    background: #fff;
+                    border-radius: 0 0 1.5rem 1.5rem;
+                    flex: 1 1 auto;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-end;
+                }
+                .card-title {
+                    letter-spacing: 0.5px;
+                }
+                .card-img-livro {
+                    max-width: 100%;
+                    max-height: 320px;
+                    width: auto;
+                    height: auto;
+                    display: block;
+                    margin-left: auto;
+                    margin-right: auto;
+                    object-fit: contain;
+                    background: #f8fafc;
+                }
+                @media (max-width: 991.98px) {
+                    .col-md-3 { flex: 0 0 50%; max-width: 50%; }
+                }
+                @media (max-width: 767.98px) {
+                    .col-md-3 { flex: 0 0 100%; max-width: 100%; }
+                }
+                `;
+                document.head.appendChild(style);
+            }
 
-                livrosContainer.innerHTML = ''; 
-
-                if (livrosSalvos.length === 0) {
-                    livrosContainer.innerHTML = '<p class="text-center w-100">Nenhum livro cadastrado ainda. <a href="cadastrarLivro.html">Cadastre um novo livro!</a></p>';
+            
+            function carregarLivrosCadastrados(filtro = '') {
+                let livrosSalvos = JSON.parse(localStorage.getItem('livrosCadastrados')) || [];
+                livrosContainer.innerHTML = '';
+                let livrosFiltrados = livrosSalvos;
+                if (filtro && filtro.trim() !== '') {
+                    const termo = filtro.trim().toLowerCase();
+                    livrosFiltrados = livrosSalvos.filter(livro =>
+                        livro.nome.toLowerCase().includes(termo) ||
+                        livro.descricao.toLowerCase().includes(termo)
+                    );
+                }
+                if (livrosFiltrados.length === 0) {
+                    livrosContainer.innerHTML = `
+                        <div class="col-md-3 mb-4">
+                            <div class="card h-100 border-0 shadow-lg rounded-4 overflow-hidden" style="background: linear-gradient(135deg, #007bff 80%, #0056b3 100%); color: #fff; cursor:pointer; transition: transform 0.2s, box-shadow 0.2s;" id="cardAdicionarLivro">
+                                <div class="d-flex flex-column align-items-center justify-content-center p-4" style="height: 100%;">
+                                    <i class="bi bi-plus-circle" style="font-size: 4rem; color: #fff;"></i>
+                                    <h5 class="card-title fw-bold mt-3" style="color: #fff;">Adicionar Novo Livro</h5>
+                                    <p class="card-text" style="color: #e0f2f7;">Clique aqui para cadastrar o primeiro livro do sebo!</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    const cardAdicionar = document.getElementById('cardAdicionarLivro');
+                    if (cardAdicionar) {
+                        cardAdicionar.addEventListener('click', function () {
+                            window.location.href = 'cadastrarLivro.html';
+                        });
+                    }
                 } else {
-                    livrosSalvos.forEach(livro => {
+                    livrosContainer.innerHTML = '';
+                    livrosFiltrados.forEach((livro) => {
                         const card = criarCardLivro(livro);
                         livrosContainer.appendChild(card);
                     });
+                    const cardAdicionar = document.createElement('div');
+                    cardAdicionar.className = 'col-md-3 mb-4';
+                    cardAdicionar.innerHTML = `
+                        <div class="card h-100 border-0 shadow-lg rounded-4 overflow-hidden" style="background: linear-gradient(135deg, #007bff 80%, #0056b3 100%); color: #fff; cursor:pointer; transition: transform 0.2s, box-shadow 0.2s;" id="cardAdicionarLivro">
+                            <div class="d-flex flex-column align-items-center justify-content-center p-4" style="height: 100%;">
+                                <i class="bi bi-plus-circle" style="font-size: 4rem; color: #fff;"></i>
+                                <h5 class="card-title fw-bold mt-3" style="color: #fff;">Adicionar Novo Livro</h5>
+                                <p class="card-text" style="color: #e0f2f7;">Clique aqui para cadastrar mais um livro!</p>
+                            </div>
+                        </div>
+                    `;
+                    cardAdicionar.querySelector('#cardAdicionarLivro').addEventListener('click', function () {
+                        window.location.href = 'cadastrarLivro.html';
+                    });
+                    livrosContainer.appendChild(cardAdicionar);
                 }
+            }
+
+            if (searchButton && searchInput) {
+                searchButton.addEventListener('click', function () {
+                    carregarLivrosCadastrados(searchInput.value);
+                });
+                searchInput.addEventListener('keyup', function (e) {
+                    if (e.key === 'Enter') {
+                        carregarLivrosCadastrados(searchInput.value);
+                    }
+                });
             }
 
             carregarLivrosCadastrados();

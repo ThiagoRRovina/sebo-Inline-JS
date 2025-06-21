@@ -15,10 +15,11 @@
 
     <title>Sebo Online</title>
 </head>
+
 <body>
     <nav class="navbar-custom px-3 py-3 d-flex flex-column">
         <h1 class="titulo-navbar mb-2"
-            style="margin-left: 15px; font-size: 62px; color: aliceblue; font-family: 'Orbitron', sans-serif;">
+            style="margin-left: 15px; font-size: 62px; color: aliceblue;">
             Entre paginas
         </h1>
         <div class="d-flex gap-3">
@@ -28,46 +29,52 @@
         </div>
     </nav>
 
-    <div class="container mt-3">
+    <div class="container mt-3 hero-section py-5 mb-4">
         <form action="#" method="POST" id="formCadastroItem" class="p-4"
-            style="background-color: rgb(230, 230, 230); border-radius: 4px;">
-            <h2 id="formTitulo" class="mb-4">Cadastrar Item</h2>
+            style="background-color: rgb(255, 255, 255); border-radius: 4px;">
+            <h2 id="formTitulo" class="mb-4">Cadastrar Livro</h2>
             <div class="row mb-4">
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="inputNome" class="form-label">Nome</label>
-                        <input type="text" class="form-control" id="inputNome" name="nome" required>
+                        <input type="text" class="form-control" id="inputNome" name="nome" required
+                            style="z-index:9999;position:relative;">
                     </div>
                     <div class="mb-3">
                         <label for="inputDescricao" class="form-label">Descrição</label>
-                        <input type="text" class="form-control" id="inputDescricao" name="descricao" required>
+                        <input type="text" class="form-control" id="inputDescricao" name="descricao" required
+                            style="z-index:9999;position:relative;">
                     </div>
-                    <div class="mb-3">
-                        <label for="inputData" class="form-label">Data</label>
-                        <input type="date" class="form-control" id="inputData" name="data" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="inputPreco" class="form-label">Preço</label>
-                        <input type="number" step="0.01" class="form-control" id="inputPreco" name="preco" required>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="inputData" class="form-label">Data</label>
+                            <input type="date" class="form-control" id="inputData" name="data" required
+                                style="z-index:9999;position:relative;">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="inputPreco" class="form-label">Preço</label>
+                            <input type="text" step="0.01" class="form-control" id="inputPreco" name="preco" required
+                                style="z-index:9999;position:relative;">
+                        </div>
                     </div>
                 </div>
-
                 <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
                     <div class="text-center p-3"
                         style="background-color: #f8f9fa; border: 1px dashed #ced4da; border-radius: 5px; width: 100%; max-width: 250px;">
                         <img id="previewCapa" src="../imagens/placeholder-capa.jpg" alt="Pré-visualização da Capa"
                             class="img-fluid mb-3" style="max-height: 200px; object-fit: contain;">
                         <input type="file" id="inputCapa" name="capa" accept="image/*" class="d-none">
-                        <button type="button" class="btn btn-secondary btn-sm" id="btnEscolherImagem">
+                        <button type="button" class="btn btn-secondary btn-sm" id="btnEscolherImagem"
+                            style="z-index:9999;position:relative;">
                             <i class="bi bi-upload"></i> Escolher Imagem
                         </button>
                     </div>
                 </div>
             </div>
-
             <div class="d-flex justify-content-end gap-3 mt-4">
-                <button type="submit" class="btn btn-primary">Salvar</button>
-                <button type="button" class="btn btn-danger" id="btnCancelar">Cancelar</button>
+                <button type="submit" class="btn btn-primary" style="z-index:9999;position:relative;">Salvar</button>
+                <button type="button" class="btn btn-danger" id="btnCancelar" style="z-index:9999;position:relative;">Cancelar
+                </button>
             </div>
         </form>
     </div>
@@ -78,21 +85,18 @@
             const navInicio = document.getElementById('nav-inicio');
             const navLivros = document.getElementById('nav-livros');
             const navDiscos = document.getElementById('nav-discos');
-
-            const formCadastroItem = document.getElementById('formCadastroItem'); // ID do formulário principal
-            const formTitulo = document.getElementById('formTitulo'); // Título do formulário
+            const formCadastroItem = document.getElementById('formCadastroItem');
+            const formTitulo = document.getElementById('formTitulo');
             const btnEscolherImagem = document.getElementById('btnEscolherImagem');
             const inputCapa = document.getElementById('inputCapa');
             const previewCapa = document.getElementById('previewCapa');
             const btnCancelar = document.getElementById('btnCancelar');
-
-            // Determinar o tipo de item (livro ou disco) a partir da URL
             const urlParams = new URLSearchParams(window.location.search);
-            const tipoItem = urlParams.get('tipo') || 'livro'; // Padrão é 'livro'
+            const idItem = urlParams.get('id');
 
-            // Atualizar o título do formulário
+            // Sempre livro nesta tela
             if (formTitulo) {
-                formTitulo.textContent = `Cadastrar ${tipoItem === 'livro' ? 'Livro' : 'Disco'}`;
+                formTitulo.textContent = idItem ? 'Editar Livro' : 'Cadastrar Livro';
             }
 
             // --- Lógica de Navegação do Navbar ---
@@ -133,67 +137,96 @@
                 });
             }
 
+            // Edição de livro
+            if (idItem) {
+                const livrosSalvos = JSON.parse(localStorage.getItem('livrosCadastrados')) || [];
+                const livro = livrosSalvos.find(l => l.id == idItem);
+                if (livro) {
+                    document.getElementById('inputNome').value = livro.nome;
+                    document.getElementById('inputDescricao').value = livro.descricao;
+                    document.getElementById('inputData').value = livro.data;
+                    document.getElementById('inputPreco').value = livro.preco;
+                    previewCapa.src = livro.capa || '../imagens/placeholder-capa.jpg';
+                    if (formTitulo) formTitulo.textContent = 'Editar Livro';
+                }
+            }
+
             // --- Lógica de Submissão do Formulário para LocalStorage ---
-            if (formCadastroItem) { // Usar o novo ID do formulário
+            if (formCadastroItem) {
                 formCadastroItem.addEventListener('submit', function (event) {
                     event.preventDefault();
-
                     const nome = document.getElementById('inputNome').value;
                     const descricao = document.getElementById('inputDescricao').value;
                     const data = document.getElementById('inputData').value;
                     const preco = parseFloat(document.getElementById('inputPreco').value).toFixed(2);
                     let capaBase64 = '';
-
                     const file = inputCapa.files[0];
+                    const localStorageKey = 'livrosCadastrados';
+                    let itensSalvos = JSON.parse(localStorage.getItem(localStorageKey)) || [];
+                    function salvarOuAtualizar(capaFinal) {
+                        if (idItem) {
+                            const index = itensSalvos.findIndex(l => l.id == idItem);
+                            if (index !== -1) {
+                                itensSalvos[index] = {
+                                    id: Number(idItem),
+                                    nome,
+                                    descricao,
+                                    data,
+                                    preco,
+                                    capa: capaFinal
+                                };
+                                localStorage.setItem(localStorageKey, JSON.stringify(itensSalvos));
+                                alert('Livro editado com sucesso!');
+                                window.location.href = 'livros.html';
+                                return;
+                            }
+                        }
+                        // Cadastro novo
+                        const novoItem = {
+                            id: Date.now(),
+                            nome,
+                            descricao,
+                            data,
+                            preco,
+                            capa: capaFinal
+                        };
+                        itensSalvos.push(novoItem);
+                        localStorage.setItem(localStorageKey, JSON.stringify(itensSalvos));
+                        alert('Livro cadastrado com sucesso!');
+                        formCadastroItem.reset();
+                        previewCapa.src = '../imagens/placeholder-capa.jpg';
+                        window.location.href = 'livros.html';
+                    }
                     if (file) {
                         const reader = new FileReader();
                         reader.onloadend = function () {
                             capaBase64 = reader.result;
-
-                            const novoItem = { // Usar nome genérico para o objeto
-                                id: Date.now(),
-                                nome: nome,
-                                descricao: descricao,
-                                data: data,
-                                preco: preco,
-                                capa: capaBase64
-                            };
-
-                            // A chave do localStorage agora depende do tipo de item
-                            const localStorageKey = tipoItem === 'livro' ? 'livrosCadastrados' : 'discosCadastrados';
-
-                            let itensSalvos = JSON.parse(localStorage.getItem(localStorageKey)) || [];
-                            itensSalvos.push(novoItem);
-                            localStorage.setItem(localStorageKey, JSON.stringify(itensSalvos));
-
-                            alert(`${tipoItem === 'livro' ? 'Livro' : 'Disco'} cadastrado com sucesso!`);
-                            formCadastroItem.reset();
-                            previewCapa.src = '../imagens/placeholder-capa.jpg';
-
-                            // Redireciona para a página de listagem correta
-                            window.location.href = `${tipoItem}.html`; // Redireciona para livros.html ou discos.html
+                            salvarOuAtualizar(capaBase64);
                         };
                         reader.readAsDataURL(file);
                     } else {
-                        const novoItem = {
-                            id: Date.now(),
-                            nome: nome,
-                            descricao: descricao,
-                            data: data,
-                            preco: preco,
-                            capa: '../imagens/placeholder-capa.jpg'
-                        };
+                        let capaFinal = '../imagens/placeholder-capa.jpg';
+                        if (idItem) {
+                            const livroExistente = itensSalvos.find(l => l.id == idItem);
+                            if (livroExistente && livroExistente.capa) {
+                                capaFinal = livroExistente.capa;
+                            }
+                        }
+                        salvarOuAtualizar(capaFinal);
+                    }
+                });
+            }
 
-                        const localStorageKey = tipoItem === 'livro' ? 'livrosCadastrados' : 'discosCadastrados';
-
-                        let itensSalvos = JSON.parse(localStorage.getItem(localStorageKey)) || [];
-                        itensSalvos.push(novoItem);
-                        localStorage.setItem(localStorageKey, JSON.stringify(itensSalvos));
-
-                        alert(`${tipoItem === 'livro' ? 'Livro' : 'Disco'} cadastrado com sucesso (sem capa personalizada)!`);
-                        formCadastroItem.reset();
-                        previewCapa.src = '../imagens/placeholder-capa.jpg';
-                        window.location.href = `${tipoItem}.html`;
+            // Máscara para o campo de preço
+            const inputPreco = document.getElementById('inputPreco');
+            if (inputPreco) {
+                inputPreco.addEventListener('blur', function () {
+                    let valor = inputPreco.value.replace(',', '.');
+                    if (valor !== '') {
+                        let floatVal = parseFloat(valor);
+                        if (!isNaN(floatVal)) {
+                            inputPreco.value = floatVal.toFixed(2);
+                        }
                     }
                 });
             }
