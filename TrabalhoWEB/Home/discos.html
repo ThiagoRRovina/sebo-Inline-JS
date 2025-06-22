@@ -25,7 +25,7 @@
     </nav>
     <div class="row col-md-12 justify-content-end d-flex m-2">
         <div class="col-md-3">
-            <input type="text" id="searchInput" class="form-control m-2" placeholder="Pesquisar livros...">
+            <input type="text" id="searchInput" class="form-control m-2" placeholder="Pesquisar discos...">
         </div>
         <div class="col-md-3">
             <button class="btn btn-secondary m-2">Pesquisar</button>
@@ -71,10 +71,13 @@
                 newCard.className = 'col-md-3 mb-4';
                 newCard.innerHTML = `
                     <div class="card h-100 highlight-card border-0 shadow-lg rounded-4 overflow-hidden" style="transition: transform 0.2s, box-shadow 0.2s;">
-                        <br><img src="${disco.capa && disco.capa !== '' ? disco.capa : '../imagens/placeholder-capa.jpg'}" class="card-img-top card-img-livro" alt="Capa do disco ${disco.nome}">
+                        <br><img src="${disco.capa && disco.capa !== '' ? disco.capa : '../imagens/placeholder-capa.jpg'}" class="card-img-top card-img-livro" alt="Capa do disco ${disco.titulo}">
                         <div class="card-body bg-white rounded-bottom-4">
-                            <h5 class="card-title fw-bold text-primary">${disco.nome}</h5>
-                            <p class="card-text text-secondary">${disco.descricao}</p>
+                            <h5 class="card-title fw-bold text-primary">${disco.titulo}</h5>
+                            <p class="card-text text-secondary mb-1"><b>Artista:</b> ${disco.artista}</p>
+                            <p class="card-text text-secondary mb-1"><b>Faixas:</b> ${disco.faixas}</p>
+                            <p class="card-text text-secondary mb-1"><b>Gravadora:</b> ${disco.gravadora}</p>
+                            <p class="card-text text-secondary mb-1"><b>Ano:</b> ${disco.ano}</p>
                             <p class="card-text text-success fw-bold fs-5">R$ ${parseFloat(disco.preco).toFixed(2).replace('.', ',')}</p>
                             <div class="d-flex justify-content-between gap-2 mt-2">
                                 <button class="btn btn-warning btn-sm btn-editar rounded-pill px-3">Editar</button>

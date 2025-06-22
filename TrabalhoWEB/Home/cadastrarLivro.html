@@ -36,13 +36,13 @@
             <div class="row mb-4">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label for="inputNome" class="form-label">Nome</label>
-                        <input type="text" class="form-control" id="inputNome" name="nome" required
+                        <label for="inputTitulo" class="form-label">Título</label>
+                        <input type="text" class="form-control" id="inputTitulo" name="titulo" required
                             style="z-index:9999;position:relative;">
                     </div>
                     <div class="mb-3">
-                        <label for="inputDescricao" class="form-label">Descrição</label>
-                        <input type="text" class="form-control" id="inputDescricao" name="descricao" required
+                        <label for="inputAutor" class="form-label">Autor</label>
+                        <input type="text" class="form-control" id="inputAutor" name="autor" required
                             style="z-index:9999;position:relative;">
                     </div>
                     <div class="row">
@@ -56,6 +56,21 @@
                             <input type="text" step="0.01" class="form-control" id="inputPreco" name="preco" required
                                 style="z-index:9999;position:relative;">
                         </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputPaginas" class="form-label">Número de Páginas</label>
+                        <input type="text" class="form-control" id="inputPaginas" name="paginas" min="1" required
+                            style="z-index:9999;position:relative;">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputEditora" class="form-label">Editora</label>
+                        <input type="text" class="form-control" id="inputEditora" name="editora" required
+                            style="z-index:9999;position:relative;">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputAno" class="form-label">Ano de Publicação</label>
+                        <input type="text" class="form-control" id="inputAno" name="ano" min="1000" max="9999"
+                            required style="z-index:9999;position:relative;">
                     </div>
                 </div>
                 <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
@@ -142,8 +157,11 @@
                 const livrosSalvos = JSON.parse(localStorage.getItem('livrosCadastrados')) || [];
                 const livro = livrosSalvos.find(l => l.id == idItem);
                 if (livro) {
-                    document.getElementById('inputNome').value = livro.nome;
-                    document.getElementById('inputDescricao').value = livro.descricao;
+                    document.getElementById('inputTitulo').value = livro.titulo || '';
+                    document.getElementById('inputAutor').value = livro.autor || '';
+                    document.getElementById('inputPaginas').value = livro.paginas || '';
+                    document.getElementById('inputEditora').value = livro.editora || '';
+                    document.getElementById('inputAno').value = livro.ano || '';
                     document.getElementById('inputData').value = livro.data;
                     document.getElementById('inputPreco').value = livro.preco;
                     previewCapa.src = livro.capa || '../imagens/placeholder-capa.jpg';
@@ -155,8 +173,6 @@
             if (formCadastroItem) {
                 formCadastroItem.addEventListener('submit', function (event) {
                     event.preventDefault();
-                    const nome = document.getElementById('inputNome').value;
-                    const descricao = document.getElementById('inputDescricao').value;
                     const data = document.getElementById('inputData').value;
                     const preco = parseFloat(document.getElementById('inputPreco').value).toFixed(2);
                     let capaBase64 = '';
@@ -169,10 +185,13 @@
                             if (index !== -1) {
                                 itensSalvos[index] = {
                                     id: Number(idItem),
-                                    nome,
-                                    descricao,
-                                    data,
-                                    preco,
+                                    titulo: document.getElementById('inputTitulo').value,
+                                    autor: document.getElementById('inputAutor').value,
+                                    paginas: document.getElementById('inputPaginas').value,
+                                    editora: document.getElementById('inputEditora').value,
+                                    ano: document.getElementById('inputAno').value,
+                                    data: document.getElementById('inputData').value,
+                                    preco: parseFloat(document.getElementById('inputPreco').value).toFixed(2),
                                     capa: capaFinal
                                 };
                                 localStorage.setItem(localStorageKey, JSON.stringify(itensSalvos));
@@ -184,10 +203,13 @@
                         // Cadastro novo
                         const novoItem = {
                             id: Date.now(),
-                            nome,
-                            descricao,
-                            data,
-                            preco,
+                            titulo: document.getElementById('inputTitulo').value,
+                            autor: document.getElementById('inputAutor').value,
+                            paginas: document.getElementById('inputPaginas').value,
+                            editora: document.getElementById('inputEditora').value,
+                            ano: document.getElementById('inputAno').value,
+                            data: document.getElementById('inputData').value,
+                            preco: parseFloat(document.getElementById('inputPreco').value).toFixed(2),
                             capa: capaFinal
                         };
                         itensSalvos.push(novoItem);

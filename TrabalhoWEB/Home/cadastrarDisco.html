@@ -35,16 +35,6 @@
             <h2 id="formTitulo" class="mb-4">Cadastrar Item</h2>
             <div class="row mb-4">
                 <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="inputNome" class="form-label">Nome</label>
-                        <input type="text" class="form-control" id="inputNome" name="nome" required
-                            style="z-index:9999;position:relative;">
-                    </div>
-                    <div class="mb-3">
-                        <label for="inputDescricao" class="form-label">Descrição</label>
-                        <input type="text" class="form-control" id="inputDescricao" name="descricao" required
-                            style="z-index:9999;position:relative;">
-                    </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="inputData" class="form-label">Data</label>
@@ -56,6 +46,31 @@
                             <input type="text" step="0.01" class="form-control" id="inputPreco" name="preco" required
                                 style="z-index:9999;position:relative;">
                         </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputTitulo" class="form-label">Título</label>
+                        <input type="text" class="form-control" id="inputTitulo" name="titulo" required
+                            style="z-index:9999;position:relative;">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputArtista" class="form-label">Artista</label>
+                        <input type="text" class="form-control" id="inputArtista" name="artista" required
+                            style="z-index:9999;position:relative;">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputFaixas" class="form-label">Número de Faixas</label>
+                        <input type="text" class="form-control" id="inputFaixas" name="faixas" min="1" required
+                            style="z-index:9999;position:relative;">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputGravadora" class="form-label">Gravadora</label>
+                        <input type="text" class="form-control" id="inputGravadora" name="gravadora" required
+                            style="z-index:9999;position:relative;">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputAno" class="form-label">Ano de Lançamento</label>
+                        <input type="text" class="form-control" id="inputAno" name="ano" min="1000" max="9999"
+                            required style="z-index:9999;position:relative;">
                     </div>
                 </div>
 
@@ -131,10 +146,15 @@
                 const discosSalvos = JSON.parse(localStorage.getItem('discosCadastrados')) || [];
                 const disco = discosSalvos.find(d => d.id == idItem);
                 if (disco) {
-                    document.getElementById('inputNome').value = disco.nome;
-                    document.getElementById('inputDescricao').value = disco.descricao;
+                    // document.getElementById('inputNome').value = disco.nome;
+                    // document.getElementById('inputDescricao').value = disco.descricao;
                     document.getElementById('inputData').value = disco.data;
                     document.getElementById('inputPreco').value = disco.preco;
+                    document.getElementById('inputTitulo').value = disco.titulo || '';
+                    document.getElementById('inputArtista').value = disco.artista || '';
+                    document.getElementById('inputFaixas').value = disco.faixas || '';
+                    document.getElementById('inputGravadora').value = disco.gravadora || '';
+                    document.getElementById('inputAno').value = disco.ano || '';
                     previewCapa.src = disco.capa || '../imagens/placeholder-capa.jpg';
                     if (formTitulo) formTitulo.textContent = 'Editar Disco';
                 }
@@ -142,8 +162,6 @@
             if (formCadastroItem) {
                 formCadastroItem.addEventListener('submit', function (event) {
                     event.preventDefault();
-                    const nome = document.getElementById('inputNome').value;
-                    const descricao = document.getElementById('inputDescricao').value;
                     const data = document.getElementById('inputData').value;
                     const preco = parseFloat(document.getElementById('inputPreco').value).toFixed(2);
                     let capaBase64 = '';
@@ -156,11 +174,14 @@
                             if (index !== -1) {
                                 itensSalvos[index] = {
                                     id: Number(idItem),
-                                    nome,
-                                    descricao,
                                     data,
                                     preco,
-                                    capa: capaFinal
+                                    capa: capaFinal,
+                                    titulo: document.getElementById('inputTitulo').value,
+                                    artista: document.getElementById('inputArtista').value,
+                                    faixas: document.getElementById('inputFaixas').value,
+                                    gravadora: document.getElementById('inputGravadora').value,
+                                    ano: document.getElementById('inputAno').value
                                 };
                                 localStorage.setItem(localStorageKey, JSON.stringify(itensSalvos));
                                 alert('Disco editado com sucesso!');
@@ -168,14 +189,16 @@
                                 return;
                             }
                         }
-                        // Cadastro novo
                         const novoItem = {
                             id: Date.now(),
-                            nome,
-                            descricao,
                             data,
                             preco,
-                            capa: capaFinal
+                            capa: capaFinal,
+                            titulo: document.getElementById('inputTitulo').value,
+                            artista: document.getElementById('inputArtista').value,
+                            faixas: document.getElementById('inputFaixas').value,
+                            gravadora: document.getElementById('inputGravadora').value,
+                            ano: document.getElementById('inputAno').value
                         };
                         itensSalvos.push(novoItem);
                         localStorage.setItem(localStorageKey, JSON.stringify(itensSalvos));

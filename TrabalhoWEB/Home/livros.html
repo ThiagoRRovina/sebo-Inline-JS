@@ -79,10 +79,13 @@
                 cardNovo.className = 'col-md-3 mb-4';
                 cardNovo.innerHTML = `
                     <div class="card h-100 highlight-card border-0 shadow-lg rounded-4 overflow-hidden" style="transition: transform 0.2s, box-shadow 0.2s;">
-                        <br><img src="${livro.capa && livro.capa !== '' ? livro.capa : '../imagens/placeholder-capa.jpg'}" class="card-img-top card-img-livro" alt="Capa do livro ${livro.nome}">
+                        <br><img src="${livro.capa && livro.capa !== '' ? livro.capa : '../imagens/placeholder-capa.jpg'}" class="card-img-top card-img-livro" alt="Capa do livro ${livro.titulo}">
                         <div class="card-body bg-white rounded-bottom-4">
-                            <h5 class="card-title fw-bold text-primary">${livro.nome}</h5>
-                            <p class="card-text text-secondary">${livro.descricao}</p>
+                            <h5 class="card-title fw-bold text-primary">${livro.titulo}</h5>
+                            <p class="card-text text-secondary mb-1"><b>Autor:</b> ${livro.autor}</p>
+                            <p class="card-text text-secondary mb-1"><b>Páginas:</b> ${livro.paginas}</p>
+                            <p class="card-text text-secondary mb-1"><b>Editora:</b> ${livro.editora}</p>
+                            <p class="card-text text-secondary mb-1"><b>Ano:</b> ${livro.ano}</p>
                             <p class="card-text text-success fw-bold fs-5">R$ ${parseFloat(livro.preco).toFixed(2).replace('.', ',')}</p>
                             <div class="d-flex justify-content-between gap-2 mt-2">
                                 <button class="btn btn-warning btn-sm btn-editar rounded-pill px-3">Editar</button>
@@ -90,8 +93,6 @@
                             </div>
                         </div>
                     </div>
-
-                    
                 `;
                 cardNovo.querySelector('.btn-editar').addEventListener('click', function () {
                     window.location.href = `cadastrarLivro.html?tipo=livro&id=${livro.id}`;
@@ -170,8 +171,9 @@
                 if (filtro && filtro.trim() !== '') {
                     const termo = filtro.trim().toLowerCase();
                     livrosFiltrados = livrosSalvos.filter(livro =>
-                        livro.nome.toLowerCase().includes(termo) ||
-                        livro.descricao.toLowerCase().includes(termo)
+                        (livro.titulo && livro.titulo.toLowerCase().includes(termo)) ||
+                        (livro.autor && livro.autor.toLowerCase().includes(termo)) ||
+                        (livro.editora && livro.editora.toLowerCase().includes(termo))
                     );
                 }
                 if (livrosFiltrados.length === 0) {
