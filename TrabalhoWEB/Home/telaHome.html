@@ -20,7 +20,7 @@
 
     <nav class="navbar-custom px-3 py-3 d-flex flex-column" style="background-color: rgb(2, 153, 133); box-shadow: black;">
         <div class="w-100 d-flex justify-content-between align-items-center mb-2">
-            <h1 class="titulo-navbar mb-0" style="margin-left: 15px; font-size: 62px; color: rgb(255, 255, 255);">Entre paginas</h1>
+            <h1 class="titulo-navbar mb-0" style="margin-left: 15px; font-size: 62px; color: rgb(255, 255, 255);">Entre Páginas</h1>
         </div>
         <div class="d-flex gap-3">
             <span class="nav-item" id="nav-inicio">Início</span>
@@ -30,7 +30,7 @@
     </nav>
     <main class="container-fluid p-0">
         <section class="hero-section text-center py-5 mb-4">
-            <h1>Bem-vindo ao Sebo Online!</h1>
+            <h1>Bem-vindo ao Entre Paginas!</h1>
             <p class="lead">Descubra livros e discos únicos para sua coleção.</p>
             <a href="livros.html" id="btn-explorar-livros" style="z-index:9999;position:relative;" class="btn btn-primary btn-lg me-2">Explorar Livros</a>
             <a href="discos.html" id="btn-explorar-discos" style="z-index:9999;position:relative;" class="btn btn-secondary btn-lg">Explorar Discos</a>
@@ -44,24 +44,50 @@
                     <div class="card h-100 highlight-card"> <img src="../imagens/HarryPotter.jpg" class="card-img-top"
                             alt="Capa Livro Destaque">
                         <div class="card-body">
-                            <h5 class="card-title">Livro em Destaque 1</h5>
-                            <p class="card-text">Breve descrição do livro que o torna especial esta semana.</p>
-                            <p class="card-text text-success fw-bold">R$ 50,00</p>
-                            <a href="#" class="btn btn-outline-dark">Ver Detalhes</a>
+                            <h5 class="card-title">Harry Potter e a pedra filosofal</h5>
+                            <p class="card-text">Livro completo "Harry Potter e a pedra filosofal"</p>
+                            <p class="card-text text-success fw-bold">R$ 235,00</p>
+                            <a id="btnVerDetalhesLivros" class="btn btn-outline-dark">Ver Detalhes</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 highlight-card"> <img src="../imagens/theWitcher.jpg" class="card-img-top"
+                            alt="Capa Livro Destaque">
+                        <div class="card-body">
+                            <h5 class="card-title">The witcher</h5>
+                            <p class="card-text">Disco completo "The witcher o ultimo desejo"</p>
+                            <p class="card-text text-success fw-bold">R$ 132,00</p>
+                            <a id="btnVerDetalhesDiscos" class="btn btn-outline-dark">Ver Detalhes</a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
     </main>
-
+    <footer class="text-center py-4" style="background-color: rgb(2, 153, 133);">
+        <p class="mb-0 text-white">@ 2025 Entre Páginas</p>
+        <p class="mb-0 text-white justify-content-center d-flex">Desenvolvido por;</p>
+        <p class="mb-0 text-white">Thiago Rodrigues Rovina | ra124257 </p>
+        <p class="mb-0 text-white">Felipe Matheus Alves André | ra107496</p>
+        
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const navInicio = document.getElementById('nav-inicio');
             const navLivrosNavbar = document.getElementById('nav-livros');
             const navDiscosNavbar = document.getElementById('nav-discos');
+            const btnVerDetalhes = document.getElementById('btnVerDetalhes');
+            const btnVerDetalhesDiscos = document.getElementById('btnVerDetalhesDiscos');
 
+            btnVerDetalhesDiscos.addEventListener('click', function () {
+                window.location.href = 'discos.html';
+            });
+
+            btnVerDetalhesLivros.addEventListener('click', function () {
+                window.location.href = 'livros.html';
+            });
+            
             navInicio.addEventListener('click', function () {
                 window.location.href = 'telaHome.html';
             });

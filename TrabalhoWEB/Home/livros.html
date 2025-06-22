@@ -12,18 +12,17 @@
 <body>
     <nav class="navbar-custom px-3 py-3 d-flex flex-column" style="background-color: rgb(2, 153, 133);">
         <div class="w-100 d-flex justify-content-between align-items-center mb-2">
-            <h1 class="titulo-navbar mb-0" style="margin-left: 15px; font-size: 62px; color: aliceblue;">
-                Entre paginas
-            </h1>
+            <h1 class="titulo-navbar mb-0" style="margin-left: 15px; font-size: 62px; color: aliceblue;">Entre Páginas</h1>
         </div>
         <div class="d-flex gap-3">
             <span class="nav-item" id="nav-inicio">Início</span>
-            <span class="nav-item" id="nav-livros" style="background-color: #333;">Livros</span> <span class="nav-item" id="nav-discos">Discos</span>
+            <span class="nav-item" id="nav-livros" style="background-color: #333;">Livros</span>
+             <span class="nav-item" id="nav-discos">Discos</span>
         </div>
     </nav>
     <div class="row col-md-12 justify-content-end d-flex m-2">
         <div class="col-md-3">
-            <input type="text" id="searchInput" class="form-control m-2" placeholder="Pesquisar livros...">
+            <input type="text" id="campoPesquisar" class="form-control m-2" placeholder="Pesquisar livros...">
         </div>
         <div class="col-md-3">
             <button class="btn btn-secondary m-2">Pesquisar</button>
@@ -38,6 +37,12 @@
         <hr style="width: 72%; margin-left: 10px;">
         <div class="row card-container gap-0" id="livros-container" style="justify-content: flex-start;"></div>
     </div>
+    <footer class="text-center py-4" style="background-color: rgb(2, 153, 133);">
+        <p class="mb-0 text-white">@ 2025 Entre Páginas</p>
+        <p class="mb-0 text-white justify-content-center d-flex">Desenvolvido por;</p>
+        <p class="mb-0 text-white">Thiago Rodrigues Rovina | ra124257 </p>
+        <p class="mb-0 text-white">Felipe Matheus Alves André | ra107496</p>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -48,8 +53,8 @@
             const btnCadastrar = document.getElementById('btnCadastrar'); 
 
             const livrosContainer = document.getElementById('livros-container');
-            const searchInput = document.getElementById('searchInput');
-            const searchButton = document.querySelector('.btn.btn-secondary');
+            const campoPesquisar = document.getElementById('campoPesquisar');
+            const btnPesquisar = document.querySelector('.btn.btn-secondary');
 
             if (btnCadastrar) {
                 btnCadastrar.addEventListener('click', function () {
@@ -218,13 +223,13 @@
                 }
             }
 
-            if (searchButton && searchInput) {
-                searchButton.addEventListener('click', function () {
-                    carregarLivrosCadastrados(searchInput.value);
+            if (btnPesquisar && campoPesquisar) {
+                btnPesquisar.addEventListener('click', function () {
+                    carregarLivrosCadastrados(campoPesquisar.value);
                 });
-                searchInput.addEventListener('keyup', function (e) {
+                campoPesquisar.addEventListener('keyup', function (e) {
                     if (e.key === 'Enter') {
-                        carregarLivrosCadastrados(searchInput.value);
+                        carregarLivrosCadastrados(campoPesquisar.value);
                     }
                 });
             }
