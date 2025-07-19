@@ -1,4 +1,4 @@
-error_reporting(E_ALL); // Reporta todos os erros PHP
+error_reporting(E_ALL);
 ini_set('display_errors', 1);
 FROM php:8.2-cli-alpine
 WORKDIR /app
