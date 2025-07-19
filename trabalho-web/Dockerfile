@@ -1,3 +1,5 @@
+error_reporting(E_ALL); // Reporta todos os erros PHP
+ini_set('display_errors', 1);
 FROM php:8.2-cli-alpine
 WORKDIR /app
 RUN docker-php-ext-install pdo_pgsql pgsql
