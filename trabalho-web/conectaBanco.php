@@ -1,4 +1,7 @@
 <?php
+
+error_reporting(E_ALL); 
+ini_set('display_errors', 1);
 $host = getenv('PG_HOST');
 $port = getenv('PG_PORT');
 $dbname = getenv('PG_DATABASE');
