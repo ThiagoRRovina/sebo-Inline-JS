@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.2-cli-alpine
 WORKDIR /app
 RUN docker-php-ext-install pdo_pgsql pgsql
 COPY trabalho-web/ .
